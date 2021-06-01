@@ -14,10 +14,7 @@ socket.on('onlineUsers',length=>{
 
 
 socket.on('message', message => {
-  console.log(message);
   outputMessage(message);
-
-  // Scroll down
   chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 

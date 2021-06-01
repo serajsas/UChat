@@ -16,19 +16,20 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 const Bot = "Welcome Bot "
 io.on('connection', socket => {
-    let resolveAfter5Seconds = () => {
+    let resolveAfter3Seconds = () => {
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve('resolved');
             }, 3000);
         });
     }
+
     const id = uniqid();
     let room = createRoom(id);
     const roomAvailable = availableRoom();
     if (room.id === roomAvailable.id || undefined == roomAvailable) {
         socket.join(room.id);
-        resolveAfter5Seconds().then(() => {
+        resolveAfter3Seconds().then(() => {
             io.to(room.id).emit('message', formatMessage(Bot, "Looking for someone to connect"));
         })
     } else {
@@ -37,15 +38,14 @@ io.on('connection', socket => {
     }
     const user = createUser(id);
     userJoin(user, room);
+    console.log("rooms capacity is " + room.capacity)
     socket.broadcast.to(room.id).emit('message', formatMessage(Bot, `${user.username} has joined the chat!`));
 
-    if (user.room.capacity == 2) {
-        io.to(room.id).emit('message', formatMessage(Bot, "You can type something..."));
+    if (room.capacity == 2) {
+        io.to(room.id).emit('message', formatMessage(Bot, "You can start chatting now..."));
     }
-    // socket.broadcast.to(user.room).emit('message',
-    //     formatMessage(Bot, `${user.username} has joined the chat`)
-    // );
     io.emit('onlineUsers', onlineUsers.length);
+
     // Listen for chatMessage
     socket.on('chatMessage', msg => {
         io.to(room.id).emit('message', formatMessage(user.username, msg));
@@ -65,7 +65,7 @@ io.on('connection', socket => {
         console.log("looking for someone")
 
         io.to(room.id).emit('message', formatMessage(Bot, "Looking for someone to connect"));
-        resolveAfter5Seconds().then(() => {
+        resolveAfter3Seconds().then(() => {
             io.to(room.id).emit('reload');
         })
     });
