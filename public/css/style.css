@@ -9,16 +9,15 @@
 	--error-color: #d9534f;
 } 
 #title{
-	margin-left: 50%;
+	text-align: center;
 	color: blue;
-	/* background-color: red; */
 }
 #cap{
 	color: rgb(219, 200, 90);
 }
 
 #active-users {
-	background-color: var(--light-color);
+	background-color: var(--dark-color-b);
 	text-align: center;
 	border-radius: 50px;
 	color: var(--success-color);
@@ -59,8 +58,8 @@ a {
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	padding: 15px;
-	display: flex;
-	align-items: center;
+	/* display: flex; */
+	/* align-items: center; */
 	justify-content: space-between;
 }
 
