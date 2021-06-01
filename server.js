@@ -16,21 +16,29 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 const Bot = "Welcome Bot "
 io.on('connection', socket => {
-    let resolveAfter3Seconds = () => {
+    io.to(socket.id).emit('message',formatMessage(Bot, "Welcome to UBChat"));
+    let resolveAfterhalfSecond = () => {
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve('resolved');
-            }, 3000);
+            }, 500);
         });
     }
-
+    let resolveAfter5Seconds = () => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve('resolved');
+            }, 5000);
+        });
+    }
+    resolveAfter5Seconds();
     const id = uniqid();
     let room = createRoom(id);
     const roomAvailable = availableRoom();
     if (room.id === roomAvailable.id || undefined == roomAvailable) {
         socket.join(room.id);
-        resolveAfter3Seconds().then(() => {
-            io.to(room.id).emit('message', formatMessage(Bot, "Looking for someone to connect"));
+        resolveAfterhalfSecond().then(() => {
+            io.to(room.id).emit('message', formatMessage(Bot, "Looking for someone to connect..."));
         })
     } else {
         room = roomAvailable;
@@ -65,7 +73,7 @@ io.on('connection', socket => {
         console.log("looking for someone")
 
         io.to(room.id).emit('message', formatMessage(Bot, "Looking for someone to connect"));
-        resolveAfter3Seconds().then(() => {
+        resolveAfterhalfSecond().then(() => {
             io.to(room.id).emit('reload');
         })
     });

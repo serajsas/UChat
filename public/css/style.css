@@ -10,9 +10,13 @@
 } 
 #title{
 	margin-left: 50%;
-	color: rgba(70, 70, 238, 0.767);
+	color: blue;
 	/* background-color: red; */
 }
+#cap{
+	color: rgb(219, 200, 90);
+}
+
 #active-users {
 	background-color: var(--light-color);
 	text-align: center;
