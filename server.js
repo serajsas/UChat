@@ -46,7 +46,7 @@ io.on('connection', socket => {
     }
     const user = createUser(id);
     userJoin(user, room);
-    console.log("rooms capacity is " + room.capacity)
+    // console.log("rooms capacity is " + room.capacity)
     socket.broadcast.to(room.id).emit('message', formatMessage(Bot, `${user.username} has joined the chat!`));
 
     if (room.capacity == 2) {
@@ -70,10 +70,11 @@ io.on('connection', socket => {
             removeRoom(user.room.id)
         }
         io.to(room.id).emit('message', formatMessage(user.username, ` ${user.username} has left the chat`));
-        console.log("looking for someone")
+        // console.log("looking for someone")
 
         io.to(room.id).emit('message', formatMessage(Bot, "Looking for someone to connect"));
         resolveAfterhalfSecond().then(() => {
+            io.emit('onlineUsers', onlineUsers.length);
             io.to(room.id).emit('reload');
         })
     });
@@ -81,6 +82,6 @@ io.on('connection', socket => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Listening to port ${PORT}`)
+    // console.log(`Listening to port ${PORT}`)
 })
 

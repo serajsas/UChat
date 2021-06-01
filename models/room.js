@@ -18,7 +18,7 @@ function createRoom(id) {
 
 function removeRoom(id) {
     const index = findRoom(id);
-    console.log("Index is " + index)
+    // console.log("Index is " + index)
     if(index != -1){
         availableRooms.splice(index,1);
         // console.log("removing empty room")

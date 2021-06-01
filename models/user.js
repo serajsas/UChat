@@ -31,9 +31,9 @@ function getCurrentUserInRoom(id) {
 // User leaves chat
 function userLeave(id) {
   const index = onlineUsers.findIndex(user => id === user.id)
-  console.log("index for online is " + index)
+  // console.log("index for online is " + index)
   if (index != -1) {
-    console.log("removing online elemnet")
+    // console.log("removing online elemnet")
     return onlineUsers.splice(index, 1);
   }
 }
