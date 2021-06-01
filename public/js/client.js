@@ -3,9 +3,16 @@ const chatForm = document.getElementById('chat-form');
 const chatMessages = document.querySelector('.chat-messages');
 const activeUsers = document.getElementById('active-users');
 // Message from server
+socket.on('reload',()=>{
+  location.reload();
+})
+
 socket.on('onlineUsers',length=>{
   activeUsers.innerHTML = length;
 })
+
+
+
 socket.on('message', message => {
   console.log(message);
   outputMessage(message);
@@ -53,3 +60,6 @@ function outputMessage(message) {
   div.appendChild(para);
   document.querySelector('.chat-messages').appendChild(div);
 }
+
+
+

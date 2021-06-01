@@ -10,55 +10,64 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 // const faker = require('faker');
-const { userJoin, getCurrentUser, userLeave,createUser } = require('./models/user.js');
+const { userJoin, getCurrentUserInRoom, userLeave, createUser } = require('./models/user.js');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
 
 const Bot = "Welcome Bot "
 io.on('connection', socket => {
-    // availableRooms.forEach(element => {
-    //     console.log(element.id)
-    // });
+    let resolveAfter5Seconds = () => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve('resolved');
+            }, 3000);
+        });
+    }
     const id = uniqid();
     let room = createRoom(id);
-    
     const roomAvailable = availableRoom();
-    if (undefined === roomAvailable) {
-        io.to(room.id).emit('message', formatMessage(Bot, "Looking for someone to connect"));
+    if (room.id === roomAvailable.id || undefined == roomAvailable) {
+        socket.join(room.id);
+        resolveAfter5Seconds().then(() => {
+            io.to(room.id).emit('message', formatMessage(Bot, "Looking for someone to connect"));
+        })
     } else {
         room = roomAvailable;
+        socket.join(room.id);
     }
-    socket.join(room.id);
     const user = createUser(id);
-    userJoin(user,room);
-    io.to(room.id).emit('message', formatMessage(Bot, `${user.username} has joined the chat!`));
+    userJoin(user, room);
+    socket.broadcast.to(room.id).emit('message', formatMessage(Bot, `${user.username} has joined the chat!`));
 
-    // console.log("room available with capacity " + user.room.capacity)
-    // console.log("Total number of users is : "+ onlineUsers.length)
-    if(user.room.capacity == 2){
+    if (user.room.capacity == 2) {
         io.to(room.id).emit('message', formatMessage(Bot, "You can type something..."));
-
     }
-   
-    io.emit('onlineUsers',onlineUsers.length);
+    // socket.broadcast.to(user.room).emit('message',
+    //     formatMessage(Bot, `${user.username} has joined the chat`)
+    // );
+    io.emit('onlineUsers', onlineUsers.length);
     // Listen for chatMessage
     socket.on('chatMessage', msg => {
         io.to(room.id).emit('message', formatMessage(user.username, msg));
     });
-    
-    
+
+
 
     // Runs when client disconnects
     socket.on('disconnect', () => {
         user.room.capacity--;
-        console.log("Disconnected " + user.room.id)
-        console.log("Capacity " + user.room.capacity)
         userLeave(user.id)
-        if(user.room.capacity == 0){
-            console.log("user capacity is 0 after disconnecting")
+        if (user.room.capacity == 0) {
+            // console.log("user capacity is 0 after disconnecting")
             removeRoom(user.room.id)
         }
-        io.to(room.id).emit('message', formatMessage(user.username, ` ${user.username} has left the chat! Refresh your page`));
+        io.to(room.id).emit('message', formatMessage(user.username, ` ${user.username} has left the chat`));
+        console.log("looking for someone")
+
+        io.to(room.id).emit('message', formatMessage(Bot, "Looking for someone to connect"));
+        resolveAfter5Seconds().then(() => {
+            io.to(room.id).emit('reload');
+        })
     });
 })
 

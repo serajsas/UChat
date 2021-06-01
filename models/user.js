@@ -1,6 +1,6 @@
 require('../globals.js')
 const faker = require('faker');
-
+const users = [];
 // const addUser = require('./room.js')
 // Join user to chat
 function createUser(id) {
@@ -14,11 +14,18 @@ function userJoin(user, room) {
   room.capacity++;
   user.room = room;
   onlineUsers.push(user);
+  users.push(user);
 }
-
+function getRoomUsers(room) {
+  return users.filter(user => user.room.id === room.id);
+}
 // Get current user
 function getCurrentUser(id) {
   return availableUsers.find(user => user.id === id);
+}
+
+function getCurrentUserInRoom(id) {
+  return users.find(user => user.id === id);
 }
 
 // User leaves chat
@@ -33,4 +40,4 @@ function userLeave(id) {
 
 
 
-module.exports = { userJoin, getCurrentUser, userLeave, createUser };
+module.exports = { userJoin, getCurrentUser, userLeave, createUser,getCurrentUserInRoom };
