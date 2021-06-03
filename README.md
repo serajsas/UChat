@@ -1,5 +1,8 @@
 # UChat--Instant messaging application
 
+## Link to the project:
+https://ubechat.herokuapp.com/
+
 ## **Description of the project**
 
 ### _Functionality_
