@@ -18,10 +18,7 @@ socket.on('message', message => {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
-socket.on('roomUsers', ({ room, users }) => {
-  outputRoomName(room);
-  outputUsers(users);
-});
+
 // Message submit
 chatForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -54,6 +51,7 @@ function outputMessage(message) {
   const para = document.createElement('p');
   para.classList.add('text');
   para.innerText = message.text;
+  console.log(p.color)
   div.appendChild(para);
   document.querySelector('.chat-messages').appendChild(div);
 }
