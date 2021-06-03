@@ -17,10 +17,11 @@ This project has **no specific** audience which means anyone of basic reading an
 should be able to interact with it and successfully achieve the desired results.
 
 ### Usage
+`````
+git clone https://github.com/serajsas/UChat.git
+cd UChat
+npm i 
+node server.js
 
-`git clone https://github.com/serajsas/UChat.git`
-`cd UChat`
-`npm i `
-`node server.js`
-
-`Go to localhost:3000`
+Go to localhost:3000
+`````
