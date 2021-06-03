@@ -16,10 +16,6 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 const Bot = "Welcome Bot "
 io.on('connection', socket => {
-    io.to(socket.id).emit('message',formatMessage(Bot, "Welcome to UBChat"));
-
-    io.to(socket.id).emit('message',formatMessage(Bot, "This website is for anonymous and random chatting. By using UBChat, you confirm that you are a UBC student and you should note that we are not responsible for anything happens on this website, Enjoy!"));
-
     let resolveAfterhalfSecond = () => {
         return new Promise(resolve => {
             setTimeout(() => {
@@ -49,6 +45,9 @@ io.on('connection', socket => {
     }
     const user = createUser(id);
     userJoin(user, room);
+    io.to(socket.id).emit('message',formatMessage(Bot, `Welcome to UBChat, your name is ${user.username}`));
+
+    io.to(socket.id).emit('message',formatMessage(Bot, "This website is for anonymous and random chatting. By using UBChat, you confirm that you are a UBC student and you should note that we are not responsible for anything happens on this website, Enjoy!"));
     // console.log("rooms capacity is " + room.capacity)
     socket.broadcast.to(room.id).emit('message', formatMessage(Bot, `${user.username} has joined the chat!`));
 
