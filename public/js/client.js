@@ -3,11 +3,11 @@ const chatForm = document.getElementById('chat-form');
 const chatMessages = document.querySelector('.chat-messages');
 const activeUsers = document.getElementById('active-users');
 // Message from server
-socket.on('reload',()=>{
+socket.on('reload', () => {
   location.reload();
 })
 
-socket.on('onlineUsers',length=>{
+socket.on('onlineUsers', length => {
   activeUsers.innerHTML = length;
 })
 
@@ -41,8 +41,14 @@ chatForm.addEventListener('submit', (e) => {
 
 // Output message to DOM
 function outputMessage(message) {
+  console.log(message.text);
+  
   const div = document.createElement('div');
   div.classList.add('message');
+  if (message.username == "Welcome Bot ")
+    div.style.backgroundColor = '#5cb85c';
+  else
+    div.style.backgroundColor = message.color;
   const p = document.createElement('p');
   p.classList.add('meta');
   p.innerText = message.username;
@@ -51,7 +57,6 @@ function outputMessage(message) {
   const para = document.createElement('p');
   para.classList.add('text');
   para.innerText = message.text;
-  console.log(p.color)
   div.appendChild(para);
   document.querySelector('.chat-messages').appendChild(div);
 }

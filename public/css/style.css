@@ -85,6 +85,7 @@ a {
     padding: 10px;
     margin-bottom: 15px;
     background-color: var(--success-color);
+    /* background-color: #d9534f; */
     border-radius: 5px;
     overflow-wrap: break-word;
 }
